@@ -1,5 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
+import wandb
+
 from torchreid import metrics
 from torchreid.losses import TripletLoss, CrossEntropyLoss
 
@@ -94,8 +96,8 @@ class ImageTripletEngine(Engine):
         imgs, pids = self.parse_data_for_train(data)
 
         if self.use_gpu:
-            imgs = imgs.cuda()
-            pids = pids.cuda()
+            imgs = imgs.to(f"cuda:{wandb.config.gpu_device}")
+            pids = pids.to(f"cuda:{wandb.config.gpu_device}")
 
         outputs, features = self.model(imgs)
 

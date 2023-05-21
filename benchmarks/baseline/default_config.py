@@ -3,7 +3,6 @@ from yacs.config import CfgNode as CN
 
 def get_default_config():
     cfg = CN()
-
     # model
     cfg.model = CN()
     cfg.model.name = 'resnet50'
@@ -103,13 +102,17 @@ def get_default_config():
     cfg.test.normalize_feature = False # normalize feature vectors before computing distance
     cfg.test.ranks = [1, 5, 10, 20] # cmc ranks
     cfg.test.evaluate = False # test only
-    cfg.test.eval_freq = -1 # evaluation frequency (-1 means to only test after training)
+    cfg.test.eval_freq = 1 # evaluation frequency (-1 means to only test after training)
     cfg.test.start_eval = 0 # start to evaluate after a specific epoch
     cfg.test.rerank = False # use person re-ranking
     cfg.test.visrank = False # visualize ranked results (only available when cfg.test.evaluate=True)
     cfg.test.visrank_topk = 10 # top-k ranks to visualize
     cfg.test.export_ranking_results = False # export query to gallery ranking results to JSON file in 'data.save_dir' for each
                                     # target dataset. To be used for external evaluation and submission on EvalAI
+
+    #wandb
+    cfg.wandb = CN()
+    cfg.wandb.mode = 'disabled' # 'online', 'offline' or 'disabled'
 
     return cfg
 

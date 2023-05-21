@@ -8,6 +8,7 @@ from collections import OrderedDict
 import torch
 from torch.nn import functional as F
 from torch.utils.tensorboard import SummaryWriter
+import wandb
 
 from torchreid import metrics
 from torchreid.utils import (
@@ -285,6 +286,9 @@ class Engine(object):
 
             end = time.time()
 
+        # Log each metrics 
+        for name, meter in losses.meters.items():
+            wandb.log({f'Train/{name}': meter.avg}, step=self.epoch + 1)
         self.update_lr()
 
     def forward_backward(self, data):
@@ -341,6 +345,7 @@ class Engine(object):
             if self.writer is not None and rank1 is not None and mAP is not None:
                 self.writer.add_scalar(f'Test/{name}/rank1', rank1, self.epoch)
                 self.writer.add_scalar(f'Test/{name}/mAP', mAP, self.epoch)
+                wandb.log({f'Test/{name}/rank1': rank1, f'Test/{name}/mAP': mAP}, step=self.epoch + 1)
             if rank1 is not None:
                 last_rank1 = rank1
 
@@ -369,7 +374,7 @@ class Engine(object):
             for batch_idx, data in enumerate(data_loader):
                 imgs, pids, camids = self.parse_data_for_eval(data)
                 if self.use_gpu:
-                    imgs = imgs.cuda()
+                    imgs = imgs.to(f"cuda:{wandb.config.gpu_device}")
                 end = time.time()
                 features = self.extract_features(imgs)
                 batch_time.update(time.time() - end)
@@ -436,9 +441,11 @@ class Engine(object):
             )
             print('** Results **')
             print('mAP: {:.1%}'.format(mAP))
+            wandb.log({f'Test/{dataset_name}/mAP': mAP}, step=self.epoch + 1)
             print('CMC curve')
             for r in ranks:
                 print('Rank-{:<3}: {:.1%}'.format(r, cmc[r - 1]))
+                wandb.log({f'Test/{dataset_name}/Rank-{r}': cmc[r - 1]}, step=self.epoch + 1)
             return cmc[0], mAP
         else:
             print("Couldn't compute CMC and mAP because of hidden identity labels.")

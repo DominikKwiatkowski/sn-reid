@@ -1,6 +1,7 @@
 from __future__ import division, absolute_import
 import torch
 import torch.nn as nn
+import wandb
 
 
 class CrossEntropyLoss(nn.Module):
@@ -45,6 +46,6 @@ class CrossEntropyLoss(nn.Module):
         zeros = torch.zeros(log_probs.size())
         targets = zeros.scatter_(1, targets.unsqueeze(1).data.cpu(), 1)
         if self.use_gpu:
-            targets = targets.cuda()
+            targets = targets.to(f"cuda:{wandb.config.gpu_device}")
         targets = (1 - self.eps) * targets + self.eps / self.num_classes
         return (-targets * log_probs).mean(0).sum()

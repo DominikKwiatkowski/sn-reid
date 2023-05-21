@@ -4,6 +4,7 @@ import numpy as np
 from itertools import repeat
 from collections import namedtuple, defaultdict
 import torch
+import wandb
 
 __all__ = ['compute_model_complexity']
 """
@@ -318,7 +319,7 @@ def compute_model_complexity(
     model.eval().apply(_add_hooks)
     input = torch.rand(input_size)
     if next(model.parameters()).is_cuda:
-        input = input.cuda()
+        input = input.to(f"cuda:{wandb.config.gpu_device}")
     model(input) # forward
 
     for handle in registered_handles:

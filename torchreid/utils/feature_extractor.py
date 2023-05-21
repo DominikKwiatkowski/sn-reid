@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torchvision.transforms as T
 from PIL import Image
+import wandb
 
 from torchreid.utils import (
     check_isfile, load_pretrained_weights, compute_model_complexity
@@ -64,7 +65,7 @@ class FeatureExtractor(object):
         pixel_mean=[0.485, 0.456, 0.406],
         pixel_std=[0.229, 0.224, 0.225],
         pixel_norm=True,
-        device='cuda',
+        device=f'cuda:0',
         verbose=True
     ):
         # Build model
@@ -75,7 +76,8 @@ class FeatureExtractor(object):
             use_gpu=device.startswith('cuda')
         )
         model.eval()
-
+        if torch.cuda.is_available():
+            device = f'cuda:{wandb.config.gpu_device}'
         if verbose:
             num_params, flops = compute_model_complexity(
                 model, (1, 3, image_size[0], image_size[1])

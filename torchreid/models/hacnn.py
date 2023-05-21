@@ -2,6 +2,7 @@ from __future__ import division, absolute_import
 import torch
 from torch import nn
 from torch.nn import functional as F
+import wandb
 
 __all__ = ['HACNN']
 
@@ -301,7 +302,7 @@ class HACNN(nn.Module):
         theta[:, :, :2] = scale_factors
         theta[:, :, -1] = theta_i
         if self.use_gpu:
-            theta = theta.cuda()
+            theta = theta.to(f"cuda:{wandb.config.gpu_device}")
         return theta
 
     def forward(self, x):

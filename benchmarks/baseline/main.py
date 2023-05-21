@@ -4,6 +4,7 @@ import os.path as osp
 import argparse
 import torch
 import torch.nn as nn
+import wandb
 
 import torchreid
 from torchreid.utils import (
@@ -122,6 +123,12 @@ def main():
         '--root', type=str, default='', help='path to data root'
     )
     parser.add_argument(
+        '--name', type=str, default='', help='name of experiment'
+    )
+    parser.add_argument(
+        '--gpu_device', type=int, help='gpu device ids', default=0
+    )
+    parser.add_argument(
         'opts',
         default=None,
         nargs=argparse.REMAINDER,
@@ -137,6 +144,11 @@ def main():
     cfg.merge_from_list(args.opts)
     set_random_seed(cfg.train.seed)
     check_cfg(cfg)
+    wandb.init(entity="pg-pug-tennis-betting", project='soccernet-reid', config=cfg, mode=cfg.wandb.mode)
+    wandb.run.name = args.name + wandb.run.id
+    wandb.config.gpu_device = args.gpu_device
+
+    cfg.data.save_dir = wandb.run.dir
 
     log_name = 'test.log' if cfg.test.evaluate else 'train.log'
     log_name += time.strftime('-%Y-%m-%d-%H-%M-%S')
@@ -168,7 +180,7 @@ def main():
         load_pretrained_weights(model, cfg.model.load_weights)
 
     if cfg.use_gpu:
-        model = nn.DataParallel(model).cuda()
+        model =model.to(f"cuda:{wandb.config.gpu_device}")
 
     optimizer = torchreid.optim.build_optimizer(model, **optimizer_kwargs(cfg))
     scheduler = torchreid.optim.build_lr_scheduler(
@@ -185,6 +197,7 @@ def main():
     )
     engine = build_engine(cfg, datamanager, model, optimizer, scheduler)
     engine.run(**engine_run_kwargs(cfg))
+    wandb.finish()
 
 
 if __name__ == '__main__':

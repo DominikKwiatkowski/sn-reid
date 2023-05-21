@@ -10,6 +10,7 @@ import os.path as osp
 import argparse
 import cv2
 import torch
+import wandb
 from torch.nn import functional as F
 
 import torchreid
@@ -50,7 +51,7 @@ def visactmap(
         for batch_idx, data in enumerate(data_loader):
             imgs, paths = data['img'], data['impath']
             if use_gpu:
-                imgs = imgs.cuda()
+                imgs = imgs.to(f"cuda:{wandb.config.gpu_device}")
 
             # forward to get convolutional feature maps
             try:
@@ -159,7 +160,7 @@ def main():
     )
 
     if use_gpu:
-        model = model.cuda()
+        model = model.to(f"cuda:{wandb.config.gpu_device}")
 
     if args.weights and check_isfile(args.weights):
         load_pretrained_weights(model, args.weights)

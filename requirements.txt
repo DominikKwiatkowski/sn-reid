@@ -15,3 +15,6 @@ yapf
 isort==4.3.21
 imageio
 soccernet~=0.1.25
+timm==0.6.12
+wandb
+

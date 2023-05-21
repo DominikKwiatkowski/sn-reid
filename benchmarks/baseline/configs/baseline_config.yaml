@@ -1,5 +1,5 @@
 model:
-  name: 'resnet50_fc512'
+  name: 'ViTSmall'
 
 data:
   type: 'image'
@@ -8,7 +8,7 @@ data:
   width: 128
   workers: 4
   sources: ['soccernetv3']
-  targets: ['soccernetv3', 'soccernetv3_test', 'soccernetv3_challenge']
+  targets: ['soccernetv3', 'soccernetv3_test']
   # training and validation sets are in the 'soccernetv3' dataset
   # test set is in the 'soccernetv3_test' dataset
   # challenge set is in the 'soccernetv3_challenge' dataset
@@ -31,9 +31,9 @@ loss:
     weight_x: 0.5
 
 train:
-  batch_size: 32
+  batch_size: 64
   print_freq: 10
-  max_epoch: 10
+  max_epoch: 5
 
 test:
   ranks: [1]

@@ -20,6 +20,7 @@ import os
 import numpy as np
 import argparse
 import torch
+import wandb
 
 from utils import *
 from gnn_reranking import *
@@ -59,8 +60,8 @@ def main():
 
     gallery_feature = torch.FloatTensor(data['gallery_f'])
     query_feature = torch.FloatTensor(data['query_f'])
-    query_feature = query_feature.cuda()
-    gallery_feature = gallery_feature.cuda()
+    query_feature = query_feature.to(f"cuda:{wandb.config.gpu_device}")
+    gallery_feature = gallery_feature.to(f"cuda:{wandb.config.gpu_device}")
 
     indices = gnn_reranking(query_feature, gallery_feature, args.k1, args.k2)
     evaluate_ranking_list(

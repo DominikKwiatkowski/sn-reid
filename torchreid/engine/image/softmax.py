@@ -1,5 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
+import wandb
+
 from torchreid import metrics
 from torchreid.losses import CrossEntropyLoss
 
@@ -79,8 +81,8 @@ class ImageSoftmaxEngine(Engine):
         imgs, pids = self.parse_data_for_train(data)
 
         if self.use_gpu:
-            imgs = imgs.cuda()
-            pids = pids.cuda()
+            imgs = imgs.to(f"cuda:{wandb.config.gpu_device}")
+            pids = pids.to(f"cuda:{wandb.config.gpu_device}")
 
         outputs = self.model(imgs)
         loss = self.compute_loss(self.criterion, outputs, pids)
