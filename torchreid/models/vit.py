@@ -252,10 +252,10 @@ class VisionTransformer(nn.Module):
     def forward(self, im, return_features=False):
         v = self.featuremaps(im)
         v = v[:, 0]
-        y = self.head(v)
         if not self.training:
             return v
-
+        
+        y = self.head(v)
         if self.loss == 'softmax':
             return y
         elif self.loss == 'triplet':
