@@ -31,6 +31,8 @@ train:
   batch_size: 64
   print_freq: 10
   max_epoch: 50
+  lr: 0.00001
+  stepsize: [10]
 
 test:
   ranks: [1]
