@@ -112,7 +112,7 @@ def get_default_config():
 
     #wandb
     cfg.wandb = CN()
-    cfg.wandb.mode = 'online' # 'online', 'offline' or 'disabled'
+    cfg.wandb.mode = 'disabled' # 'online', 'offline' or 'disabled'
 
     return cfg
 

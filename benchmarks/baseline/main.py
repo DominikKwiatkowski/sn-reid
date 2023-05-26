@@ -36,8 +36,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth
             )
-
-        else:
+        elif cfg.loss.name == 'triplet':
             engine = torchreid.engine.ImageTripletEngine(
                 datamanager,
                 model,
@@ -49,6 +48,21 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth
             )
+        elif cfg.loss.name == 'centroid':
+            engine = torchreid.engine.ImageCentroidEngine(
+                datamanager,
+                model,
+                optimizer=optimizer,
+                margin=cfg.loss.triplet.margin,
+                weight_t=cfg.loss.triplet.weight_t,
+                weight_x=cfg.loss.triplet.weight_x,
+                scheduler=scheduler,
+                use_gpu=cfg.use_gpu,
+                label_smooth=cfg.loss.softmax.label_smooth
+            )
+        
+        else:
+            raise ValueError('Unknown loss: {}'.format(cfg.loss.name))
 
     else:
         if cfg.loss.name == 'softmax':
