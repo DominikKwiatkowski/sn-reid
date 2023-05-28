@@ -29,7 +29,7 @@ loss:
     weight_x: 0.5
 
 train:
-  batch_size: 64
+  batch_size: 128
   print_freq: 10
   max_epoch: 50
   lr: 0.00001

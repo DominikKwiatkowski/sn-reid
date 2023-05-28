@@ -13,8 +13,6 @@ data:
   # test set is in the 'soccernetv3_test' dataset
   # challenge set is in the 'soccernetv3_challenge' dataset
 
-soccernetv3:
-  training_subset: 0.01 # train model on 1% of training set samples
 
 sampler:
   train_sampler: RandomIdentitySampler
@@ -33,7 +31,7 @@ loss:
 train:
   batch_size: 128
   print_freq: 10
-  max_epoch: 5
+  max_epoch: 50
 
 test:
   ranks: [1]
