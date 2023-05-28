@@ -259,7 +259,7 @@ class ResNetMid(nn.Module):
 
         if self.loss == 'softmax':
             return y
-        elif self.loss == 'triplet':
+        elif self.loss == 'triplet' or self.loss == 'centroid':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
