@@ -308,7 +308,7 @@ def build_transforms(
 
     if 'random_erase' in transforms:
         print('+ random erase')
-        transform_tr += [RandomErasing(mean=norm_mean)]
+        transform_tr += [RandomErasing(sh=0.2, mean=norm_mean)]
 
     transform_tr = Compose(transform_tr)
 

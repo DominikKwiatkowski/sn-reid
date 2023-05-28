@@ -95,6 +95,19 @@ class ImageTripletEngine(Engine):
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
 
+        # Preview images in the batch
+        # # Convert tensors to to numpy arrays
+        # imgs_np = imgs.cpu().numpy()
+
+        # # Convert 3 channel images: (3, 256, 128) -> (256, 128, 3)
+        # imgs_np = imgs_np.transpose(0, 2, 3, 1)
+
+        # import matplotlib.pyplot as plt
+
+        # # Plot the first image in the batch
+        # plt.imshow(imgs_np[0])
+        # plt.show()
+
         if self.use_gpu:
             imgs = imgs.to(f"cuda:{wandb.config.gpu_device}")
             pids = pids.to(f"cuda:{wandb.config.gpu_device}")

@@ -138,3 +138,10 @@ log/
 saved-models/
 model-zoo/
 debug*
+
+datasets/
+Scripts/
+share/
+wandb/
+.vscode/
+pyvenv.cfg
