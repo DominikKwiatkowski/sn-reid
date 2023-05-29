@@ -17,4 +17,5 @@ imageio
 soccernet~=0.1.25
 timm==0.6.12
 wandb
+pytorch-metric-learning
 
