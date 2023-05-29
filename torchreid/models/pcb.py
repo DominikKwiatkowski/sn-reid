@@ -257,7 +257,7 @@ class PCB(nn.Module):
 
         if self.loss == 'softmax':
             return y
-        elif self.loss == 'triplet' or self.loss == 'centroid':
+        elif self.loss == 'triplet' or self.loss == 'centroid' or 'triplet_arcface':
             v_g = F.normalize(v_g, p=2, dim=1)
             return y, v_g.view(v_g.size(0), -1)
         else:

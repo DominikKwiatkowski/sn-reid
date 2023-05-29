@@ -253,7 +253,7 @@ class DenseNet(nn.Module):
 
         if self.loss == 'softmax':
             return y
-        elif self.loss == 'triplet' or self.loss == 'centroid':
+        elif self.loss == 'triplet' or self.loss == 'centroid' or 'triplet_arcface':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))

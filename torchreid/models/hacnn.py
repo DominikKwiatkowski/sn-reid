@@ -405,7 +405,7 @@ class HACNN(nn.Module):
             else:
                 return prelogits_global
 
-        elif self.loss == 'triplet' or self.loss == 'centroid':
+        elif self.loss == 'triplet' or self.loss == 'centroid' or 'triplet_arcface':
             if self.learn_region:
                 return (prelogits_global, prelogits_local), (x_global, x_local)
             else:
